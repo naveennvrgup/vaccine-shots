@@ -7,12 +7,13 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
 
-@app.route('/', methods=['GET'])
+@app.route('/api/v2/appointment/sessions/public/findByPin', methods=['GET'])
 def home():
     query_parameters = request.args
     date = query_parameters.get('date')
     pincode = query_parameters.get('pincode')
 
     return jsonify(sample_sessions)
+
 
 app.run()
