@@ -4,7 +4,7 @@ import argparse
 
 def get_bangalore_vaccine_slots(date, pincodes):
     BASE_URL = 'https://cdn-api.co-vin.in'
-    BASE_URL = 'http://temp-server'
+    BASE_URL = 'http://localhost:5000'
 
     headers = {
         'Accept-Language': 'en_US',
@@ -14,10 +14,8 @@ def get_bangalore_vaccine_slots(date, pincodes):
 
     for pincode in pincodes:
         query_url = f'{BASE_URL}/api/v2/appointment/sessions/public/findByPin?pincode={pincode}&date={date}'
-        print(">>>",query_url)
         response = requests.get(query_url, headers=headers)
         sessions.append(response.json())
-
 
     return sessions
 
