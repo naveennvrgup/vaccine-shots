@@ -1,0 +1,13 @@
+version: "3"
+services:
+    # temp-server:
+    #     build: ./server
+    temp-server:
+        image: temp-server
+        ports:
+            - "5000:5000"
+    client:
+        # build: ./client
+        image: client
+        depends_on: 
+            - temp-server

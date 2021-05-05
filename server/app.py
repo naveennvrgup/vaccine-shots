@@ -16,4 +16,5 @@ def home():
     return jsonify(sample_sessions)
 
 
-app.run()
+if __name__ == '__main__':
+    app.run()
