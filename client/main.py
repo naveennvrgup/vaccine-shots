@@ -1,10 +1,10 @@
 import requests
 import argparse
 
+BASE_URL = 'https://cdn-api.co-vin.in'
+BASE_URL = 'http://localhost:5000'
 
 def get_api_helper(date, pincode):
-    BASE_URL = 'https://cdn-api.co-vin.in'
-    BASE_URL = 'http://localhost:5000'
 
     headers = {
         'Accept-Language': 'en_US',
@@ -14,24 +14,30 @@ def get_api_helper(date, pincode):
     query_url = f'{BASE_URL}/api/v2/appointment/sessions/public/findByPin?pincode={pincode}&date={date}'
     response = requests.get(query_url, headers=headers, timeout=2)
     response.raise_for_status()
-    
-    return response.json()
 
+    return response.json()
 
 
 def get_bangalore_vaccine_slots(date, pincodes):
 
-    sessions = []
+    slots = []
 
     for pincode in pincodes:
-        try:
-            response = get_api_helper(date, pincode)
-            sessions_by_pincode = response['sessions']
-            sessions.append({pincode: sessions_by_pincode})
-        except (requests.exceptions.Timeout):
-            sessions.append({pincode: None})
+        # try:
+        response = get_api_helper(date, pincode)
+        sessions_by_pincode = response['sessions']
 
-    return sessions
+        for session in sessions_by_pincode:
+            slots_by_center = [{
+                'center_id': session['center_id'], 
+                'name': session['name'], 
+                'slot': y} for y in session['slots']]
+            slots.extend(slots_by_center)
+        
+        # except (requests.exceptions.Timeout):
+        #     pass
+
+    return slots
 
 
 if __name__ == "__main__":
