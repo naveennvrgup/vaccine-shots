@@ -1,4 +1,5 @@
 import pytest
+import requests
 from main import get_bangalore_vaccine_slots, BASE_URL
 from test_data import all_calls_succeed, some_calls_5xx, some_calls_timeout
 from requests.exceptions import Timeout, HTTPError
@@ -35,8 +36,9 @@ class MockResponse:
 def convert_responses(responses):
     return [MockResponse(x) for x in responses]  
 
-@pytest.mark.parametrize('date,pincodes,api_responses,expected', some_calls_5xx.data)
-def test_some_calls_5xx(mocker, date, pincodes, api_responses, expected):
+
+@pytest.mark.parametrize('date,pincodes,api_responses,expected', some_calls_5xx.data + some_calls_timeout.data)
+def test_some_calls_5xx_or_timeout(mocker, date, pincodes, api_responses, expected):
     converted_api_responses = convert_responses(api_responses)
     mocker.patch('requests.get', side_effect = converted_api_responses)
     actual = get_bangalore_vaccine_slots(date,pincodes)
@@ -49,6 +51,9 @@ def test_all_calls_timeout(mocker):
     get_bangalore_vaccine_slots('05-05-2021',['560116','562106','562135','562110'])
 
 
-def test_all_calls_5xx(mocker):
-    mocker.patch('requests.get', side_effect=HTTPError)
+def mock_get(url, headers, timeout):
+    raise Timeout()
+
+def test_all_calls_5xx(monkeypatch):
+    monkeypatch.setattr(requests,'get',mock_get)
     get_bangalore_vaccine_slots('05-05-2021',['560116','562106','562135','562110'])
