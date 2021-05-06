@@ -2,7 +2,6 @@ import flask
 from flask import request, jsonify
 from sample_response import sample_sessions
 
-
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
