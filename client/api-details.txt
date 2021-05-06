@@ -7,23 +7,18 @@ Banglore Rural district id = 276
 Banglore Urban district id = 265
 
 # API for plots by district_id
-https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=265&date=05-05-2021
+https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=276&date=05-05-2021
 
 
 Ex Banglore Urban pincodes:
-560116
-562106
 562135
-562110
-561204
+569399
 562111
-562114
 562110
-562163
-562110
-562111
-562129
-562135
+
 
 # API for plots by pincode
 https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=562110&date=05-05-2021
+
+
+python main.py -d 05-05-2021 -p 562135 569399 562111 562110

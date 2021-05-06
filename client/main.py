@@ -31,6 +31,7 @@ def get_bangalore_vaccine_slots(date, pincodes):
                 slots_by_center = [{
                     'center_id': session['center_id'], 
                     'name': session['name'], 
+                    'pincode': session['pincode'],
                     'slot': y} for y in session['slots']]
                 slots.extend(slots_by_center)
         except ( requests.exceptions.Timeout, requests.exceptions.HTTPError) as e:
@@ -49,8 +50,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     output = get_bangalore_vaccine_slots(args.date, args.pincodes)
-    output = [(idx+1,x['center_id'],x['name'],x['slot']) for x,idx in zip(output,range(len(output)))]
-    output = tabulate(output, tablefmt='psql',  headers=['s.no','center_id', 'name', 'slot'])
+    output = [(idx+1,x['pincode'],x['center_id'],x['name'],x['slot']) for x,idx in zip(output,range(len(output)))]
+    output = tabulate(output, tablefmt='psql',  headers=['s.no','pincode','center_id', 'name', 'slot'])
 
     print(output)
 
