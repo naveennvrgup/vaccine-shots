@@ -33,7 +33,8 @@ def get_bangalore_vaccine_slots(date, pincodes):
                     'name': session['name'], 
                     'slot': y} for y in session['slots']]
                 slots.extend(slots_by_center)
-        except (requests.exceptions.Timeout):
+                # requests.exceptions.Timeout,
+        except ( requests.exceptions.HTTPError):
             pass
 
     return slots
