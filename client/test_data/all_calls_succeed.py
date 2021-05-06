@@ -2,7 +2,7 @@ session_1 = {
     'sessions':[{
         'center_id': 234,
         'name': 'APPLE TEST',
-        'slots': ["09:00AM-11:00AM","12:00AM-01:00PM",'01:00PM-02:00PM']
+        'slots': ["09:00AM-11:00AM",'01:00PM-02:00PM']
     }]}
 
 session_2 ={ 
@@ -41,21 +41,39 @@ pincodes = [
     562110
 ]
 
-api_responses = [
+api_responses_case1_no_slot_available = [
+    response_no_session,
+    response_no_session,
+    response_no_session,
+    response_no_session,
+]
+
+api_responses_case2_1slot_available = [
+    response_no_session,
+    response_2,
+    response_no_session,
+    response_no_session,
+]
+
+api_responses_case3_3slots_available = [
     response_1,
     response_2,
     response_no_session,
     response_no_session,
 ]
 
-expected = [{
+expected_case1_no_slot_available = []
+
+expected_case2_1slot_available = [{
+            'center_id': 546,
+            'name': 'BANANNA SYRUP',
+            'slot':"12:00AM-01:00PM"
+        }]
+
+expected_case3_3slots_available = [{
             'center_id': 234,
             'name': 'APPLE TEST',
             'slot':"09:00AM-11:00AM"
-        },{
-            'center_id': 234,
-            'name': 'APPLE TEST',
-            'slot':"12:00AM-01:00PM"
         },{
             'center_id': 234,
             'name': 'APPLE TEST',
@@ -70,7 +88,19 @@ data = [
     (
         date,
         pincodes,
-        api_responses,
-        expected
-    )
+        api_responses_case1_no_slot_available,
+        expected_case1_no_slot_available
+    ),
+    (
+        date,
+        pincodes,
+        api_responses_case2_1slot_available,
+        expected_case2_1slot_available
+    ),
+    (
+        date,
+        pincodes,
+        api_responses_case3_3slots_available,
+        expected_case3_3slots_available
+    ),
 ]

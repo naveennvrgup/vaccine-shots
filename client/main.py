@@ -23,19 +23,18 @@ def get_bangalore_vaccine_slots(date, pincodes):
     slots = []
 
     for pincode in pincodes:
-        # try:
-        response = get_api_helper(date, pincode)
-        sessions_by_pincode = response['sessions']
+        try:
+            response = get_api_helper(date, pincode)
+            sessions_by_pincode = response['sessions']
 
-        for session in sessions_by_pincode:
-            slots_by_center = [{
-                'center_id': session['center_id'], 
-                'name': session['name'], 
-                'slot': y} for y in session['slots']]
-            slots.extend(slots_by_center)
-        
-        # except (requests.exceptions.Timeout):
-        #     pass
+            for session in sessions_by_pincode:
+                slots_by_center = [{
+                    'center_id': session['center_id'], 
+                    'name': session['name'], 
+                    'slot': y} for y in session['slots']]
+                slots.extend(slots_by_center)
+        except (requests.exceptions.Timeout):
+            pass
 
     return slots
 
