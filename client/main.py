@@ -1,7 +1,8 @@
 import requests
 import argparse
+from tabulate import tabulate
 
-BASE_URL = 'https://api.demo.co-vin.in'
+BASE_URL = 'https://cdn-api.co-vin.in'
 # BASE_URL = 'http://localhost:5000'
 
 def get_api_helper(date, pincode):
@@ -13,7 +14,6 @@ def get_api_helper(date, pincode):
 
     query_url = f'{BASE_URL}/api/v2/appointment/sessions/public/findByPin?pincode={pincode}&date={date}'
     response = requests.get(query_url, headers=headers, timeout=2)
-    print(response)
     response.raise_for_status()
 
     return response.json()
@@ -48,6 +48,11 @@ if __name__ == "__main__":
                         default=[], help='space separated list of 6 digit pincodes')
     args = parser.parse_args()
 
-    print(get_bangalore_vaccine_slots(args.date, args.pincodes))
+    output = get_bangalore_vaccine_slots(args.date, args.pincodes)
+    output = [(idx+1,x['center_id'],x['name'],x['slot']) for x,idx in zip(output,range(len(output)))]
+    output = tabulate(output, tablefmt='psql',  headers=['s.no','center_id', 'name', 'slot'])
+
+    print(output)
+
 
 
