@@ -6,7 +6,7 @@ from requests.exceptions import Timeout, HTTPError
 
 query_url = f'{BASE_URL}/api/v2/appointment/sessions/public/findByPin'
 
-# exampel response
+# example response
 # response_1 = {
 #     'json': {'sessions':[{
 #         'center_id': 234,
@@ -40,7 +40,11 @@ def convert_responses(responses):
 @pytest.mark.parametrize('date,pincodes,api_responses,expected', some_calls_5xx.data + some_calls_timeout.data)
 def test_some_calls_5xx_or_timeout(mocker, date, pincodes, api_responses, expected):
     converted_api_responses = convert_responses(api_responses)
-    mocker.patch('requests.get', side_effect = converted_api_responses)
+    # we provide a mock response object(MockResponse)
+    # can also provide list of responses
+    # 1st response will be used for 1st call
+    # 2nd response will be used for 2nd call and so on
+    mocker.patch('requests.get', side_effect = converted_api_responses) 
     actual = get_bangalore_vaccine_slots(date,pincodes)
     
     assert expected == actual
@@ -55,5 +59,7 @@ def mock_get(url, headers, timeout):
     raise Timeout()
 
 def test_all_calls_5xx(monkeypatch):
+    # here we provide a substitute function
+    # that will be called instead of the actual function
     monkeypatch.setattr(requests,'get',mock_get)
     get_bangalore_vaccine_slots('05-05-2021',['560116','562106','562135','562110'])
